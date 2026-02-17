@@ -1,93 +1,238 @@
-﻿namespace ConsoleApp5
+﻿using System.Drawing;
 
+namespace ConsoleApp4
 {
     internal class Program
     {
         static void Main(string[] args)
         {
 
-            int[] array = new int[5];
+
+            Console.WriteLine("Enter a day number (1–7).");
+            int dayNumber;
+
+            while (true)
+            {
+                bool isDayOfWeak = int.TryParse(Console.ReadLine(), out dayNumber);
+                if (isDayOfWeak && (dayNumber >= 1 && dayNumber <= 7))
+                {
+
+                    DayOfWeek day = (DayOfWeek)dayNumber;
+
+                    Console.WriteLine($"The day of the week is: {day}");
+
+                    string dayStatus = day switch
+                    {
+                        DayOfWeek.Saturday or DayOfWeek.Friday => "Weekend",
+                        _ => "Workday"
+                    };
+                    Console.WriteLine($"The day is a: {dayStatus}");
+                    break;
+
+                }
+                else
+                {
+                    Console.WriteLine("Invalid input. Please enter a number between 1 and 7.");
+                }
+
+
+
+
+
+
+
+
+
+            }
+
+
+            Console.WriteLine("Enter array size :");
+            int[]? array = new int[int.Parse(Console.ReadLine()!)];
           
-            for (int i=0; i<array.Length; i++)
+
+            for (int i = 0; i < array.Length; i++)
             {
-                Console.WriteLine($"Enter score for student {i+1}:  ");
-                bool isScore = int.TryParse(Console.ReadLine(), out array[i]);
-                if (!isScore)
+                Console.WriteLine($"Enter element {i}:");
+                bool isElement = int.TryParse(Console.ReadLine(), out array[i]);
+                if (!isElement)
                 {
-                    Console.WriteLine(" Number is Invalid ");
-                    i--;
+                    Console.WriteLine("Invalid input. Please enter an integer.");
+                    i--; //
+                }
+         
+            
+                 } 
+
+            int sum = 0;
+                foreach (int item in array)
+                {
+                    sum += item;
+                    
 
                 }
-            }
+            int max = array[0];
+            int min = array[0];
 
-            GetMinMax(array, out int max, out int min);
-            Console.WriteLine($"The maximum score is: {max}");
-            Console.WriteLine($"The minimum score is: {min}");
-            CalculateAverage(array);
-            Console.WriteLine($"The average score is: {CalculateAverage(array)}");
-            
-            for(var i=0; i < array.Length; i++)
+
+            for (int i = 0;i < array.Length; i++)
             {
-                Console.WriteLine($"the Grade of Student {i}= {GetGrade(array[i])}") ;
-            }
-
-
-        }
-
-        static void GetMinMax(int[] score ,out int max ,out int min)
-        {
-            max=score[0];
-            min = score[0];
-            
-            for(int i = 1; i < score.Length; i++)
-            {
-                if (score[i] > max)
-                {
-                    max = score[i];
-                }
-                if (score[i] < min)
-                {
-                    min = score[i];
-                }   
                 
+                if (array[i] > max)
+                {
+                    max = array[i];
+                }
+                if (array[i] < min)
+                {
+                    min = array[i];
+                }
+
+
+            }
+     
+            Console.WriteLine($"Sum={sum}");
+
+            double agerage = (double)sum / array.Length;
+
+            Console.WriteLine($"Agerage={agerage}");
+
+            Console.WriteLine($"min{min}");
+
+            Console.WriteLine($"max={max}");
+            Console.WriteLine("\nArray in reverse order:");
+            for (int i = array.Length - 1; i >= 0; i--)
+            {
+                Console.Write(array[i] + " ");
+            }
+
+
+            Console.WriteLine("==================");
+
+
+            int students = 3;
+            int subjects = 4;
+            double[,] grades = new double[students, subjects];
+
            
+            for (int i = 0; i < students; i++)
+            {
+                Console.WriteLine($"\nEnter grades for student {i + 1}:");
+                for (int j = 0; j < subjects; j++)
+                {
+                    bool validInput = false;
+                    while (!validInput)
+                    {
+                        Console.Write($"Grade for subject {j + 1}: ");
+                        validInput = double.TryParse(Console.ReadLine(), out grades[i, j]);
+                        if (!validInput)
+                        {
+                            Console.WriteLine("Invalid input! Please enter a number.");
+                        }
+                    }
+                }
             }
-            
+
+            double totalSum = 0;
+            Console.WriteLine("\nStudent averages:");
+            for (int i = 0; i < students; i++)
+            {
+                double summ = 0;
+                for (int j = 0; j < subjects; j++)
+                {
+                    summ += grades[i, j];
+                }
+                double average = summ / subjects;
+                totalSum += summ; 
+                Console.WriteLine($"Student {i + 1} average: {average:F2}");
+            }
+
+            double classAverage = totalSum / (students * subjects);
+            Console.WriteLine($"\nClass average: {classAverage:F2}");
+
+
+
+            Console.WriteLine("==================");
+
+
+            Console.WriteLine("Enter first number:");
+            bool isFirstNumber = double.TryParse(Console.ReadLine(), out double firstNumber);
+            if (!isFirstNumber)
+            {
+                Console.WriteLine("Invalid input! Please enter a number.");
+                return;
+            }
+
+            Console.WriteLine("Enter second number:");
+            bool isSecondNumber = double.TryParse(Console.ReadLine(), out double secondNumber);
+            if (!isSecondNumber)
+            {
+                Console.WriteLine("Invalid input! Please enter a number.");
+                return;
+            }
+
+            Console.WriteLine("select the type of operation : (+, -, *, /)");
+            char operation = Console.ReadLine()![0];
+           
+            switch (operation)
+            {
+                case '+': 
+                Console.WriteLine($"Result: {Add(firstNumber, secondNumber)}");
+                    break;
+                case '-':
+             Console.WriteLine($"Result:{Subtract(firstNumber, secondNumber)}");
+                    break;
+                case '*':
+                    Console.WriteLine($"Result: {Multiply(firstNumber, secondNumber)}");
+                    break;
+                case '/':
+                    Console.WriteLine($"Result: {Divide(firstNumber, secondNumber)}");
+                    break;
+                default:
+                    Console.WriteLine("Invalid operation! Please select one of the following: +, -, *, /");
+                    break;
+            }
+
+
+
+
+
+
+
+
+
+
+
+
         }
 
 
-       static double CalculateAverage(int[] score)
+        static double Add(double a, double b)
         {
-            int sum = 0; 
-            foreach (int item in score)
-            {
-                sum += item;
-
-            }
-            return (double)sum / score.Length;
+            return a + b;
+        }
+        static double Subtract(double a, double b)
+        {
+            return a - b;
+        }
+        static double Multiply(double a, double b)
+        {
+            return a * b;
         }
 
-        static Grade GetGrade(int score) { 
-        if(score >=90)
+        static double Divide(double a, double b)
+        {
+            if (b == 0)
             {
-                return Grade.A;
+                Console.WriteLine("Error: Division by zero is not allowed.");
+                return double.NaN;
             }
-            else if (score >= 80)
-            {
-                return Grade.B;
-            }
-            else if (score >= 70)
-            {
-                return Grade.C;
-            }
-            else if (score >= 60)
-            {
-                return Grade.D;
-            }
-            else
-            {
-                return Grade.F;
-            }
+            return a / b;
         }
+
+
+
+
+
+
     }
 }
+    
